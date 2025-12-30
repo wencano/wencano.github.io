@@ -56,20 +56,16 @@
         .workflow-connector {
             position: relative;
         }
-        .workflow-connector::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: -50%;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, currentColor, transparent);
-            transform: translateY(-50%);
-        }
-        @media (max-width: 768px) {
-            .workflow-connector::after {
-                display: none;
+        @keyframes dashFlow {
+            0% {
+                stroke-dashoffset: 22;
             }
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+        .animate-dash-flow {
+            animation: dashFlow 2s linear infinite;
         }
     </style>
 </head>
@@ -122,9 +118,9 @@
                 </p> -->
             </div>
             
-            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-16">
+            <div class="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-16">
                 <!-- Input -->
-                <div class="workflow-step flex-1 max-w-sm" style="animation-delay: 0.1s;">
+                <div class="workflow-step flex-1 max-w-sm w-full relative z-10" style="animation-delay: 0.1s;">
                     <div class="relative">
                         <div class="absolute -inset-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-xl opacity-30 dark:opacity-20 animate-pulse-slow"></div>
                         <div class="relative bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
@@ -152,20 +148,8 @@
                     </div>
                 </div>
 
-                <!-- Arrow/Connector -->
-                <div class="workflow-connector workflow-arrow hidden md:block flex-shrink-0" style="animation-delay: 0.2s;">
-                    <div class="relative">
-                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Process -->
-                <div class="workflow-step flex-1 max-w-sm" style="animation-delay: 0.3s;">
+                <div class="workflow-step flex-1 max-w-sm w-full relative z-10" style="animation-delay: 0.3s;">
                     <div class="relative">
                         <div class="absolute -inset-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 dark:opacity-20 animate-pulse-slow" style="animation-delay: 0.5s;"></div>
                         <div class="relative bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
@@ -192,20 +176,8 @@
                     </div>
                 </div>
 
-                <!-- Arrow/Connector -->
-                <div class="workflow-connector workflow-arrow hidden md:block flex-shrink-0" style="animation-delay: 0.4s;">
-                    <div class="relative">
-                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-2 h-2 bg-purple-500 rounded-full animate-ping" style="animation-delay: 0.3s;"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Output -->
-                <div class="workflow-step flex-1 max-w-sm" style="animation-delay: 0.5s;">
+                <div class="workflow-step flex-1 max-w-sm w-full relative z-10" style="animation-delay: 0.5s;">
                     <div class="relative">
                         <div class="absolute -inset-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl blur-xl opacity-30 dark:opacity-20 animate-pulse-slow" style="animation-delay: 1s;"></div>
                         <div class="relative bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
@@ -234,6 +206,32 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Connector Lines (positioned in gaps) -->
+                <div class="workflow-arrow hidden md:block absolute h-4 pointer-events-none z-5" style="animation-delay: 0.2s;">
+                    <svg class="w-full h-full" viewBox="0 0 200 4" preserveAspectRatio="none">
+                        <line x1="0" y1="2" x2="200" y2="2" 
+                              stroke="#3b82f6" 
+                              stroke-width="1" 
+                              stroke-dasharray="20 6" 
+                              stroke-linecap="round"
+                              class="dark:stroke-blue-400 animate-dash-flow"
+                              style="stroke-dashoffset: 22;">
+                        </line>
+                    </svg>
+                </div>
+                <div class="workflow-arrow hidden md:block absolute h-4 pointer-events-none z-5" style="animation-delay: 0.4s;">
+                    <svg class="w-full h-full" viewBox="0 0 200 4" preserveAspectRatio="none">
+                        <line x1="0" y1="2" x2="200" y2="2" 
+                              stroke="#a855f7" 
+                              stroke-width="1" 
+                              stroke-dasharray="20 6" 
+                              stroke-linecap="round"
+                              class="dark:stroke-purple-400 animate-dash-flow"
+                              style="stroke-dashoffset: 22; animation-delay: 0.3s;">
+                        </line>
+                    </svg>
                 </div>
             </div>
             <div class="text-center mt-16">
@@ -337,6 +335,56 @@
             arrow.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
             observer.observe(arrow);
         });
+
+        // Position connectors dynamically between boxes
+        function positionConnectors() {
+            const container = document.querySelector('.workflow-step').parentElement;
+            const boxes = document.querySelectorAll('.workflow-step');
+            const arrows = document.querySelectorAll('.workflow-arrow');
+            
+            if (boxes.length >= 2 && arrows.length >= 2 && window.innerWidth >= 768) {
+                const box1 = boxes[0];
+                const box2 = boxes[1];
+                const box3 = boxes[2];
+                
+                if (box1 && box2 && arrows[0]) {
+                    const box1Right = box1.getBoundingClientRect().right;
+                    const box2Left = box2.getBoundingClientRect().left;
+                    const containerLeft = container.getBoundingClientRect().left;
+                    const containerTop = container.getBoundingClientRect().top;
+                    
+                    const left = box1Right - containerLeft;
+                    const width = box2Left - box1Right;
+                    const top = (box1.getBoundingClientRect().top + box1.getBoundingClientRect().bottom) / 2 - containerTop - 50;
+                    
+                    arrows[0].style.left = `${left}px`;
+                    arrows[0].style.width = `${width}px`;
+                    arrows[0].style.top = `${top}px`;
+                    arrows[0].style.transform = 'translateY(-50%)';
+                }
+                
+                if (box2 && box3 && arrows[1]) {
+                    const box2Right = box2.getBoundingClientRect().right;
+                    const box3Left = box3.getBoundingClientRect().left;
+                    const containerLeft = container.getBoundingClientRect().left;
+                    const containerTop = container.getBoundingClientRect().top;
+                    
+                    const left = box2Right - containerLeft;
+                    const width = box3Left - box2Right;
+                    const top = (box2.getBoundingClientRect().top + box2.getBoundingClientRect().bottom) / 2 - containerTop - 50; 
+                    
+                    arrows[1].style.left = `${left}px`;
+                    arrows[1].style.width = `${width}px`;
+                    arrows[1].style.top = `${top}px`;
+                    arrows[1].style.transform = 'translateY(-50%)';
+                }
+            }
+        }
+        
+        // Position on load and resize
+        window.addEventListener('load', positionConnectors);
+        window.addEventListener('resize', positionConnectors);
+        setTimeout(positionConnectors, 100);
     </script>
 </body>
 </html>
